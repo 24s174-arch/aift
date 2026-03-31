@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사이언스 4 all</title>
+    <style>
+        /* 기본 여백 제거 및 스크롤바 방지 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Malgun Gothic', sans-serif;
+            overflow: hidden;
+        }
+
+        /* 각 화면 기본 설정 */
+        .screen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+
+        /* 양옆 1/6 (16.66vw), 상하 1/8 (12.5vh) 남기고 흰색으로 채우는 박스 */
+        .center-white {
+            position: absolute;
+            left: 16.666vw;  
+            top: 20vh;     
+            width: 66.666vw; /* 전체 100 - (16.666 * 2) */
+            height: 80vh;    /* 전체 100 - (12.5 * 2) */
+            background-color: white;
+            z-index: 1;
+        }
+
+        /* 배경색 설정 */
+        #home-screen { background-color: blue; }
+        #orange-screen { background-color: orange; }
+        #gray-screen { background-color: gray; }
+        #green-screen { background-color: green; }
+        #login-screen { background-color: white; }
+
+        /* 공통 버튼 스타일 */
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        /* --- 텍스트 및 박스 스타일 --- */
+        .main-title {
+            position: absolute;
+            top: 16vh; /* 흰색 박스 상단 여백에서 살짝 아래로 배치 */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28pt;
+            z-index: 2;
+            margin: 0;
+            color: black;
+        }
+
+        .gray-title-box {
+            position: absolute;
+            top: 16vh;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: whitesmoke;
+            padding: 30px 160px;
+            z-index: 2;
+            border-radius: 8px;
+        }
+
+        .gray-title-box span {
+            color: black;
+            font-size: 28pt;
+            font-weight: bold;
+        }
+
+        /* --- 위치 지정 버튼 (가로 1/12 = 8.33vw, 세로 1/8 = 12.5vh) --- */
+        .login-btn {
+            position: absolute;
+            right: 8.333vw;
+            top: 12.5vh;
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            padding: 10px 25px;
+            z-index: 10;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 5vw;
+            top: 8vh;
+            padding: 10px 25px;
+            z-index: 10;
+            color: white;
+            border: none;
+        }
+        .back-btn.blue { background-color: blue; }
+        .back-btn.orange { background-color: orange; }
+
+        /* --- 첫 화면: 중앙 메뉴 버튼 --- */
+        .center-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 2;
+        }
+        .center-menu button {
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            color: white;
+            border: none;
+        }
+        .btn-orange { background-color: orange; }
+        .btn-gray { background-color: gray; }
+        .btn-green { background-color: green; }
+
+        /* --- 로그인 화면: 중앙 폼 --- */
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            z-index: 2;
+        }
+        .login-container input {
+            padding: 15px;
+            width: 240px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .login-submit-btn {
+            background-color: blue;
+            color: white;
+            border: none;
+            width: 240px;
+            height: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* '로그인하기' 버튼 면적의 1/4 크기 (가로 1/2, 세로 1/2) */
+        .signup-btn {
+            background-color: gray;
+            color: white;
+            border: none;
+            width: 120px;
+            height: 25px;
+            font-size: 0.8rem;
+            margin-top: -5px; /* 버튼 사이 간격 미세 조정 */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-screen" class="screen active">
+        <div class="center-white"></div>
+        <div class="gray-title-box">
+            <span>사이언스 4 all</span>
+        </div>
+        <button class="login-btn" onclick="changeScreen('login-screen')">로그인</button>
+        <div class="center-menu">
+            <button class="btn-orange" onclick="changeScreen('orange-screen')">S 4 내신</button>
+            <button class="btn-gray" onclick="changeScreen('gray-screen')">S 4 생활</button>
+            <button class="btn-green" onclick="changeScreen('green-screen')">S 4 일상</button>
+        </div>
+    </div>
+
+    <div id="orange-screen" class="screen">
+        <div class="center-white"></div>
+        <div class="gray-title-box">
+            <span>S 4 내신</span>
+        </div>
+        <button class="back-btn blue" onclick="changeScreen('home-screen')">-돌아가기-</button>
+    </div>
+
+    <div id="gray-screen" class="screen">
+        <div class="center-white"></div>
+        <div class="gray-title-box">
+            <span>S 4 생활</span>
+        </div>
+        <button class="back-btn blue" onclick="changeScreen('home-screen')">-돌아가기-</button>
+    </div>
+
+    <div id="green-screen" class="screen">
+        <div class="center-white"></div>
+        <div class="gray-title-box">
+            <span>S 4 일상</span>
+        </div>
+        <button class="back-btn blue" onclick="changeScreen('home-screen')">-돌아가기-</button>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <button class="back-btn orange" onclick="changeScreen('home-screen')">-돌아가기-</button>
+        <div class="login-container">
+            <input type="text" placeholder="아이디">
+            <input type="password" placeholder="비밀번호">
+            <button class="login-submit-btn">로그인하기</button>
+            <button class="signup-btn">계정 생성하기</button>
+        </div>
+    </div>
+
+    <script>
+        function changeScreen(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
