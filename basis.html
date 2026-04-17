@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>science 4 all</title>
+    <style>
+        /* 화면 전체를 파란색으로 채움 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #007BFF; /* 파란색 배경 */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            font-family: 'Malgun Gothic', sans-serif;
+            position: relative;
+        }
+
+        /* 양옆 60pt, 위 30pt 여백을 제외하고 흰색으로 채움 */
+        .white-container {
+            background-color: white;
+            width: calc(100% - 120pt); /* 양옆 60pt씩 총 120pt 제외 */
+            height: calc(100% - 30pt);  /* 위 30pt 제외 */
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 화면 위쪽 끝부터 20pt 떨어진 좌우 중점 상아색 글상자 */
+        .title-box {
+            position: absolute;
+            top: 20pt;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFFDD0; /* 상아색 */
+            padding: 10px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .title-text {
+            font-size: 40pt;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        /* 왼쪽 위 로그인 버튼 (왼쪽 끝 20pt, 위쪽 끝 10pt) */
+        .login-btn {
+            position: absolute;
+            left: 20pt;
+            top: 10pt;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14pt;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* 2x2 버튼 그리드 배치 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 200px);
+            grid-template-rows: repeat(2, 100px);
+            gap: 20px;
+        }
+
+        .grid-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            border-radius: 10px;
+            font-size: 16pt;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .grid-btn:hover { transform: scale(1.05); }
+
+        /* 각 버튼 색상 설정 */
+        .btn-orange { background-color: #FF8C00; } /* 주황색 */
+        .btn-gray   { background-color: #808080; } /* 회색 */
+        .btn-green  { background-color: #90EE90; color: #333; } /* 연한 초록 */
+        .btn-blue   { background-color: #ADD8E6; color: #333; } /* 연한 파랑 */
+
+    </style>
+</head>
+<body>
+
+    <button class="login-btn" onclick="location.href='login.html'">로그인</button>
+
+    <div class="title-box">
+        <p class="title-text">사이언스 4 all</p>
+    </div>
+
+    <div class="white-container">
+        <div class="grid-container">
+            <button class="grid-btn btn-orange">S 4 내신</button>
+            <button class="grid-btn btn-gray">S 4 내신</button> <button class="grid-btn btn-green">S 4 일상</button>
+            <button class="grid-btn btn-blue" style="font-size: 12pt;">이 사이트의 제작 동기</button>
+        </div>
+    </div>
+
+</body>
+</html>

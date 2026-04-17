@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>S 4 생활 - science 4 all</title>
+    <style>
+        body {
+            margin: 0; padding: 0; background-color: #28A745; /* 초록색 배경 */
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+
+        /* 흰색 컨테이너: 양옆 60pt, 위아래 30pt 여백 */
+        .white-container {
+            background-color: white;
+            width: calc(100% - 120pt); 
+            height: calc(100% - 60pt);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            overflow-y: auto; /* 게시글이 많아지면 스크롤 */
+        }
+
+        h2 { color: #28A745; border-bottom: 2px solid #28A745; padding-bottom: 10px; }
+
+        /* 게시글 작성 영역 */
+        .post-input-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+        .post-input-section input, .post-input-section textarea {
+            width: 100%; margin-bottom: 10px; padding: 10px;
+            border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
+        }
+        .btn-post {
+            background-color: #28A745; color: white; border: none;
+            padding: 10px 20px; border-radius: 5px; cursor: pointer; float: right;
+        }
+
+        /* 게시물 목록 스타일 */
+        .post-card {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .post-header { font-weight: bold; color: #333; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .post-content { margin-bottom: 15px; line-height: 1.6; }
+
+        /* 댓글 영역 */
+        .comment-section {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .comment-item { border-bottom: 1px solid #e0e0e0; padding: 5px 0; }
+        .comment-input-group { display: flex; margin-top: 10px; gap: 5px; }
+        .comment-input-group input { flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 3px; }
+        .btn-comment { background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="white-container">
+        <h2>S 4 생활 - 자유게시판</h2>
+
+        <div class="post-input-section">
+            <input type="text" id="post-title" placeholder="제목을 입력하세요">
+            <textarea id="post-content" rows="3" placeholder="내용을 입력하세요"></textarea>
+            <button class="btn-post" onclick="addPost()">게시물 추가</button>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div id="post-list">
+            <div class="post-card">
+                <div class="post-header">
+                    <span>작성자: 관리자</span>
+                    <span>2026-04-10</span>
+                </div>
+                <div class="post-content">science 4 all의 생활 게시판에 오신 것을 환영합니다! 과학적인 일상을 공유해 주세요.</div>
+                <div class="comment-section" id="comments-0">
+                    <div class="comment-item"><b>탐구인:</b> 정말 기대되네요!</div>
+                    <div class="comment-input-group">
+                        <input type="text" placeholder="댓글을 남겨보세요">
+                        <button class="btn-comment">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 게시물 추가 기능
+        function addPost() {
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+
+            if(!title || !content) return alert("제목과 내용을 입력해주세요.");
+
+            const postList = document.getElementById('post-list');
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            
+            // 현재 날짜 생성
+            const date = new Date().toLocaleDateString();
+
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <span>제목: ${title}</span>
+                    <span>${date}</span>
+                </div>
+                <div class="post-content">${content}</div>
+                <div class="comment-section">
+                    <div class="comment-input-group">
+                        <input type="text" placeholder="댓글을 남겨보세요">
+                        <button class="btn-comment" onclick="alert('댓글이 등록되었습니다.')">등록</button>
+                    </div>
+                </div>
+            `;
+
+            postList.prepend(postDiv); // 최신글이 위로 오게 추가
+            
+            // 입력창 비우기
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+            const API_BASE = "http://localhost:3000/api";
+
+// 1. 페이지 로드 시 게시글 불러오기
+window.onload = loadPosts;
+
+async function loadPosts() {
+    const response = await fetch(`${API_BASE}/posts`);
+    const posts = await response.json();
+    const postList = document.getElementById('post-list');
+    postList.innerHTML = ''; // 초기화
+
+    posts.forEach(post => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post-card';
+        postDiv.innerHTML = `
+            <div class="post-header">
+                <span>제목: ${post.title} (작성자: ${post.username})</span>
+                <span>${new Date(post.created_at).toLocaleDateString()}</span>
+            </div>
+            <div class="post-content">${post.content}</div>
+            <div class="comment-section">
+                <div class="comment-input-group">
+                    <input type="text" id="reply-${post.id}" placeholder="댓글을 남겨보세요">
+                    <button class="btn-comment" onclick="addComment(${post.id})">등록</button>
+                </div>
+            </div>
+        `;
+        postList.appendChild(postDiv);
+    });
+}
+
+// 2. 게시물 실제 DB 저장
+async function addPost() {
+    const title = document.getElementById('post-title').value;
+    const content = document.getElementById('post-content').value;
+    const username = localStorage.getItem('username') || '익명'; // 로그인 정보 활용
+
+    if(!title || !content) return alert("내용을 입력하세요.");
+
+    await fetch(`${API_BASE}/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, title, content })
+    });
+
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-content').value = '';
+    loadPosts(); // 목록 새로고침
+}
+        }
+    </script>
+
+</body>
+</html>
