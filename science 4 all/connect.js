@@ -14,17 +14,3 @@ app.get('/read-file', (req, res) => {
         res.send(`파일 내용: ${data}`);
     });
 });
-const axios = require('axios');
-
-app.get('/fetch-github', async (req, res) => {
-    // GitHub의 'Raw' 버튼을 눌렀을 때 나오는 URL을 사용해야 합니다.
-    const rawUrl = 'https://raw.githubusercontent.com/사용자이름/저장소명/main/data.json';
-
-    try {
-        const response = await axios.get(rawUrl);
-        res.json(response.data);
-    } catch (error) {
-        console.error('GitHub 파일 호출 실패:', error);
-        res.status(500).send('GitHub 데이터를 가져오지 못했습니다.');
-    }
-});
