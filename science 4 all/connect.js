@@ -1,3 +1,17 @@
+onst express = require('express');
+const { Pool } = require('pg');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Render에서 설정한 DATABASE_URL 환경변수를 사용하여 연결 풀 생성
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false // Neon 등 클라우드 DB 연결 시 SSL 설정 필수
+  }
+});
+
 const fs = require('fs');
 const path = require('path');
 
